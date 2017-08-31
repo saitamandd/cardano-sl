@@ -91,7 +91,6 @@ test_script:
       -j 2
       --no-terminal
       --local-bin-path daedalus
-      --test
       --no-haddock-deps
       --work-dir %STACK_WORK%
       --ghc-options="-DCONFIG=%DCONFIG%"
@@ -103,12 +102,10 @@ test_script:
       --extra-lib-dirs="C:\OpenSSL-Win64-v102"
       --extra-include-dirs="%WORK_DIR%\rocksdb\include"
       --extra-lib-dirs="%WORK_DIR%"
-      --test-arguments="--skip Test.Pos.Update.Poll.Poll.PollState.PurePoll"
   - scripts\ci\appveyor-retry call stack install cardano-sl-tools
       -j 2
       --no-terminal
       --local-bin-path daedalus
-      --test
       --no-haddock-deps
       --work-dir %STACK_WORK%
       --ghc-options="-DCONFIG=%DCONFIG%"
@@ -125,7 +122,6 @@ test_script:
       -j 2
       --no-terminal
       --local-bin-path daedalus
-      --test
       --no-haddock-deps
       --work-dir %STACK_WORK%
       --ghc-options="-DCONFIG=%DCONFIG%"

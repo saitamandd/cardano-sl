@@ -25,12 +25,13 @@ import qualified Crypto.KDF.PBKDF2            as PBKDF2
 import qualified Crypto.MAC.Poly1305          as Poly
 import           Data.ByteArray               as BA (convert)
 import           Data.ByteString.Char8        as B
+import           Data.Data                    (Data)
 import           Universum
 
 import           Pos.Binary.Class             (Bi, decodeFull, serialize')
 import           Pos.Crypto.Hashing           (hash)
-import           Pos.Crypto.Signing.Types     (PublicKey (..), EncryptedSecretKey (..),
-                                               PassPhrase)
+import           Pos.Crypto.Signing.Types     (EncryptedSecretKey (..), PassPhrase,
+                                               PublicKey (..))
 
 -- | Passphrase is a hash of root public key.
 --- We don't use root public key to store money, we use its hash instead.
@@ -49,7 +50,7 @@ data HDPassphrase = HDPassphrase !ByteString
 data HDAddressPayload
     = HDAddressPayload
     { getHDAddressPayload :: !ByteString
-    } deriving (Eq, Ord, Show, Generic)
+    } deriving (Eq, Ord, Show, Generic, Data)
 
 instance NFData HDAddressPayload
 

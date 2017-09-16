@@ -36,7 +36,8 @@ module Pos.Crypto.Hashing
 import           Universum
 
 import           Control.Lens         (makeLensesFor)
-import           Crypto.Hash          (Blake2b_256, Digest, HashAlgorithm, hashDigestSize)
+import           Crypto.Hash          (Blake2b_256, Digest (..), HashAlgorithm,
+                                       hashDigestSize)
 import qualified Crypto.Hash          as Hash
 import qualified Data.ByteArray       as ByteArray
 import           Data.Hashable        (Hashable (hashWithSalt), hashPtrWithSalt)

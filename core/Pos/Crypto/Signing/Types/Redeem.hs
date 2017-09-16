@@ -10,14 +10,15 @@ module Pos.Crypto.Signing.Types.Redeem
        , redeemToPublic
        ) where
 
-import           Universum
-import           Data.Hashable        (Hashable)
 import qualified Data.ByteString      as BS
+import           Data.Data            (Data)
+import           Data.Hashable        (Hashable)
 import qualified Data.Text            as T
 import qualified Data.Text.Buildable  as B
 import           Formatting           (Format, bprint, fitLeft, later, (%), (%.))
 import           Serokell.Util.Base64 (formatBase64)
 import qualified Serokell.Util.Base64 as B64
+import           Universum
 
 import qualified Crypto.Sign.Ed25519  as Ed25519
 
@@ -33,13 +34,15 @@ instance NFData Ed25519.PublicKey
 instance NFData Ed25519.SecretKey
 instance NFData Ed25519.Signature
 
+deriving instance Data Ed25519.PublicKey
+
 ----------------------------------------------------------------------------
 -- PK/SK and formatters
 ----------------------------------------------------------------------------
 
 -- | Wrapper around 'Ed25519.PublicKey'.
 newtype RedeemPublicKey = RedeemPublicKey Ed25519.PublicKey
-    deriving (Eq, Ord, Show, Generic, NFData, Hashable, Typeable)
+    deriving (Eq, Ord, Show, Generic, NFData, Hashable, Typeable, Data)
 
 -- | Wrapper around 'Ed25519.SecretKey'.
 newtype RedeemSecretKey = RedeemSecretKey Ed25519.SecretKey
@@ -78,7 +81,7 @@ instance B.Buildable (RedeemSignature a) where
 -- | Public key derivation function.
 redeemToPublic :: RedeemSecretKey -> RedeemPublicKey
 redeemToPublic (RedeemSecretKey k) = RedeemPublicKey (Ed25519.secretToPublicKey k)
- 
+
 -- | Read the text into a redeeming public key. The key should be in
 -- AVVM format which is base64(url). This function must be inverse of
 -- redeemPkB64UrlF formatter.

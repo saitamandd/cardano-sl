@@ -92,12 +92,18 @@ packages:
     commit: 2d261bb971bada1893753b503452d9e6e217bc4a
   extra-dep: true
 
+# TODO remove after publishing 0.5.1 on hackage
+- location:
+    git: https://github.com/serokell/serokell-util.git
+    commit: b658d184e6b3948228ffe39ca2c0cce8454a8910
+  extra-dep: true
+
 nix:
   shell-file: shell.nix
 
 extra-deps:
 - universum-0.6.1
-- serokell-util-0.5.0
+# - serokell-util-0.5.0
 - pvss-0.2.0
 - base58-bytestring-0.1.0
 - log-warper-1.2.0

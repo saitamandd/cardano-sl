@@ -35,21 +35,21 @@ module Pos.Core.Genesis.Types
 
 import           Universum
 
-import           Control.Lens         (at)
-import           Control.Monad.Except (MonadError (throwError))
-import qualified Data.HashMap.Strict  as HM
-import qualified Data.Text            as T
-import qualified Data.Text.Buildable  as Buildable
-import           Formatting           (bprint, (%))
-import           Serokell.Util        (allDistinct, mapJson)
+import           Control.Lens             (at)
+import           Control.Monad.Except     (MonadError (throwError))
+import qualified Data.HashMap.Strict      as HM
+import qualified Data.Text                as T
+import qualified Data.Text.Buildable      as Buildable
+import           Formatting               (bprint, (%))
+import           Serokell.Util            (allDistinct, mapJson)
 
-import           Pos.Binary.Class     (Bi)
-import           Pos.Core.Address     (addressHash, decodeTextAddress)
-import           Pos.Core.Coin        (coinToInteger, sumCoins, unsafeAddCoin,
-                                       unsafeGetCoin, unsafeIntegerToCoin)
-import           Pos.Core.Types       (Address, BlockVersionData, Coin, ProxySKHeavy,
-                                       SharedSeed, StakeholderId, Timestamp, mkCoin)
-import           Pos.Core.Vss.Types   (VssCertificatesMap)
+import           Pos.Binary.Class         (Bi)
+import           Pos.Core.Address         (addressHash, decodeTextAddress)
+import           Pos.Core.Coin            (coinToInteger, sumCoins, unsafeAddCoin,
+                                           unsafeGetCoin, unsafeIntegerToCoin)
+import           Pos.Core.Types           (Address, BlockVersionData, Coin, ProxySKHeavy,
+                                           SharedSeed, StakeholderId, Timestamp, mkCoin)
+import           Pos.Core.Vss.Types       (VssCertificatesMap)
 import           Pos.Crypto.Signing.Types (ProxySecretKey (..), RedeemPublicKey,
                                            isSelfSignedPsk)
 

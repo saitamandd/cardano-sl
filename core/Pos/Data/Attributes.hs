@@ -18,6 +18,7 @@ module Pos.Data.Attributes
 import           Universum
 
 import qualified Data.ByteString     as BS
+import           Data.Data           (Data)
 import           Data.Default        (Default (..))
 import qualified Data.Hashable       as H
 import qualified Data.Map            as M
@@ -32,7 +33,7 @@ import           Pos.Binary.Class
 -- for clear backward compatibility between previous representation (which was
 -- just a single ByteString) during transition from Store to CBOR.
 newtype UnparsedFields = UnparsedFields (Map Word8 ByteString)
-    deriving (Eq, Ord, Show, Generic, Typeable, NFData)
+    deriving (Eq, Ord, Show, Generic, Typeable, NFData, Data)
 
 instance Hashable UnparsedFields where
     hashWithSalt salt = H.hashWithSalt salt . M.toList . fromUnparsedFields
@@ -62,7 +63,7 @@ data Attributes h = Attributes
       attrData   :: h
       -- | Remaining, unparsed fields.
     , attrRemain :: UnparsedFields
-    } deriving (Eq, Ord, Generic, Typeable)
+    } deriving (Eq, Ord, Generic, Typeable, Data)
 
 instance Default h => Default (Attributes h) where
     def = mkAttributes def

@@ -158,7 +158,7 @@ data AddrType
     | ATScript
     | ATRedeem
     | ATUnknown !Word8
-    deriving (Eq, Ord, Generic, Typeable, Show)
+    deriving (Eq, Ord, Generic, Typeable, Show, Data)
 
 -- | Stake distribution associated with an address.
 data AddrStakeDistribution
@@ -244,11 +244,11 @@ data BlockVersion = BlockVersion
     { bvMajor :: !Word16
     , bvMinor :: !Word16
     , bvAlt   :: !Word8
-    } deriving (Eq, Generic, Ord, Typeable)
+    } deriving (Eq, Generic, Ord, Typeable, Data)
 
 newtype ApplicationName = ApplicationName
     { getApplicationName :: Text
-    } deriving (Eq, Ord, Show, Generic, Typeable, ToString, Hashable, Buildable, NFData)
+    } deriving (Eq, Ord, Show, Generic, Typeable, ToString, Hashable, Buildable, NFData, Data)
 
 -- | Smart constructor of 'ApplicationName'.
 mkApplicationName :: MonadFail m => Text -> m ApplicationName
@@ -311,7 +311,7 @@ data SoftforkRule = SoftforkRule
     -- this one).
     , srThdDecrement :: !CoinPortion
     -- ^ Theshold will be decreased by this value after each epoch.
-    } deriving (Show, Eq, Generic)
+    } deriving (Show, Eq, Generic, Data)
 
 instance Hashable SoftforkRule
 
@@ -331,7 +331,7 @@ data BlockVersionData = BlockVersionData
     , bvdSoftforkRule      :: !SoftforkRule
     , bvdTxFeePolicy       :: !TxFeePolicy
     , bvdUnlockStakeEpoch  :: !EpochIndex
-    } deriving (Show, Eq, Generic, Typeable)
+    } deriving (Show, Eq, Generic, Typeable, Data)
 
 ----------------------------------------------------------------------------
 -- HeaderHash
@@ -375,7 +375,7 @@ type ProxySKHeavy = ProxySecretKey EpochIndex
 -- same value.
 newtype SharedSeed = SharedSeed
     { getSharedSeed :: ByteString
-    } deriving (Show, Eq, Ord, Generic, NFData, Typeable)
+    } deriving (Show, Eq, Ord, Generic, NFData, Typeable, Data)
 
 instance Buildable SharedSeed where
     build = formatBase16 . getSharedSeed
@@ -432,7 +432,7 @@ unsafeGetCoin = getCoin
 -- threshold).
 newtype CoinPortion = CoinPortion
     { getCoinPortion :: Word64
-    } deriving (Show, Ord, Eq, Generic, Typeable, NFData, Hashable)
+    } deriving (Show, Ord, Eq, Generic, Typeable, NFData, Hashable, Data)
 
 -- | Denominator used by 'CoinPortion'.
 coinPortionDenominator :: Word64
@@ -475,7 +475,7 @@ unsafeCoinPortionFromDouble x
 -- | Index of epoch.
 newtype EpochIndex = EpochIndex
     { getEpochIndex :: Word64
-    } deriving (Show, Eq, Ord, Num, Enum, Ix, Integral, Real, Generic, Hashable, Bounded, Typeable, NFData)
+    } deriving (Show, Eq, Ord, Num, Enum, Ix, Integral, Real, Generic, Hashable, Bounded, Typeable, NFData, Data)
 
 instance Buildable EpochIndex where
     build = bprint ("epoch #"%int)

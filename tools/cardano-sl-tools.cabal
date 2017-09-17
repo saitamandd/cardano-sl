@@ -193,6 +193,7 @@ executable cardano-keygen
   other-modules:       KeygenOptions
                      , Avvm
                      , Testnet
+  if !flag(for-installer)
    build-depends:      Glob
                      , QuickCheck >= 2.9
                      , aeson
@@ -251,6 +252,10 @@ executable cardano-keygen
                         BangPatterns
                         ScopedTypeVariables
 
+  if flag(for-installer)
+    buildable: False
+  else
+    buildable: True
 
 executable cardano-launcher
   hs-source-dirs:      src/launcher

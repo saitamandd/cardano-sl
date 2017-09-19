@@ -13,11 +13,12 @@ module Pos.Launcher.Scenario
 import           Universum
 
 import           Control.Lens          (views)
+import qualified Data.HashMap.Strict   as HM
 import           Data.Time.Units       (Second)
 import           Ether.Internal        (HasLens (..))
 import           Formatting            (build, int, sformat, shown, (%))
 import           Mockable              (fork)
-import           Serokell.Util.Text    (listJson)
+import           Serokell.Util.Text    (listJson, listJsonIndent, pairF)
 import           System.Exit           (ExitCode (..))
 import           System.Wlog           (WithLogger, getLoggerName, logError, logInfo,
                                         logWarning)
@@ -25,7 +26,7 @@ import           System.Wlog           (WithLogger, getLoggerName, logError, log
 import           Pos.Communication     (ActionSpec (..), OutSpecs, WorkerSpec,
                                         wrapActionSpec)
 import qualified Pos.Constants         as Const
-import           Pos.Context           (getOurPublicKey, ncNetworkConfig)
+import           Pos.Context           (genesisUtxoM, getOurPublicKey, ncNetworkConfig)
 import           Pos.Core              (addressHash)
 import qualified Pos.DB.DB             as DB
 import           Pos.DHT.Real          (KademliaDHTInstance (..),
@@ -42,6 +43,8 @@ import           Pos.Shutdown          (waitForWorkers)
 import           Pos.Slotting          (waitSystemStart)
 import           Pos.Ssc.Class         (SscConstraint)
 import           Pos.StateLock         (StateLock (..))
+import           Pos.Txp.Toil.Types    (unGenesisUtxo)
+import           Pos.Txp.Toil.Utxo     (utxoToStakes)
 import           Pos.Util              (inAssertMode)
 import           Pos.Util.Config       (configName)
 import           Pos.Util.LogSafe      (logInfoS)
@@ -110,6 +113,10 @@ runNode' NodeResources {..} workers' plugins' = ActionSpec $ \vI sendActions -> 
     LrcDB.getLeaders lastKnownEpoch >>= maybe onNoLeaders onLeaders
     tipHeader <- DB.getTipHeader @ssc
     logInfo $ sformat ("Current tip header: "%build) tipHeader
+    genesisUtxo <- genesisUtxoM
+    let genesisStakes = utxoToStakes genesisStakeholders (unGenesisUtxo genesisUtxo)
+    logInfo $ sformat ("genesisStakes: "%(listJsonIndent 2))
+                      (map (sformat pairF) $ HM.toList genesisStakes)
 
     initSemaphore
     waitSystemStart

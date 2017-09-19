@@ -11,10 +11,11 @@ module Pos.Launcher.Scenario
 
 import           Universum
 
+import qualified Data.HashMap.Strict      as HM
 import           Data.Time.Units          (Second)
 import           Formatting               (build, int, sformat, shown, (%))
 import           Mockable                 (mapConcurrently, race)
-import           Serokell.Util.Text       (listJson)
+import           Serokell.Util.Text       (listJson, listJsonIndent, pairF)
 import           System.Exit              (ExitCode (..))
 import           System.Wlog              (WithLogger, getLoggerName, logInfo, logWarning)
 
@@ -36,6 +37,7 @@ import           Pos.Reporting            (reportError)
 import           Pos.Shutdown             (waitForShutdown)
 import           Pos.Slotting             (waitSystemStart)
 import           Pos.Ssc.Class            (SscConstraint)
+import           Pos.Txp                  (genesisStakes)
 import           Pos.Update.Configuration (HasUpdateConfiguration, curSoftwareVersion,
                                            lastKnownBlockVersion, ourSystemTag)
 import           Pos.Util                 (inAssertMode)
@@ -107,6 +109,8 @@ runNode' NodeResources {..} workers' plugins' = ActionSpec $ \vI sendActions -> 
     LrcDB.getLeaders lastKnownEpoch >>= maybe onNoLeaders onLeaders
     tipHeader <- DB.getTipHeader @ssc
     logInfo $ sformat ("Current tip header: "%build) tipHeader
+    logInfo $ sformat ("Genesis stakes: "%(listJsonIndent 2)) $
+        map (sformat pairF) $ HM.toList genesisStakes
 
     waitSystemStart
     let unpackPlugin (ActionSpec action) =

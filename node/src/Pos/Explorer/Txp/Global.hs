@@ -9,7 +9,7 @@ import           Universum
 
 import qualified Data.HashMap.Strict   as HM
 
-import           Pos.Core              (HeaderHash, SlotId (..), HasCoreConstants,
+import           Pos.Core              (HasCoreConstants, HeaderHash, SlotId (..),
                                         epochIndexL, headerHash, headerSlotL)
 import           Pos.DB                (SomeBatchOp (..))
 import           Pos.Slotting          (MonadSlots, getSlotStart)
@@ -47,13 +47,14 @@ eApplyBlocksSettings =
     }
 
 extraOps :: ExplorerExtra -> SomeBatchOp
-extraOps (ExplorerExtra em (HM.toList -> histories) balances) =
+extraOps (ExplorerExtra em (HM.toList -> histories) balances utxoNewSum) =
     SomeBatchOp $
     map GS.DelTxExtra (MM.deletions em) ++
     map (uncurry GS.AddTxExtra) (MM.insertions em) ++
     map (uncurry GS.UpdateAddrHistory) histories ++
     map (uncurry GS.PutAddrBalance) (MM.insertions balances) ++
-    map GS.DelAddrBalance (MM.deletions balances)
+    map GS.DelAddrBalance (MM.deletions balances) ++
+    (maybeToList $ GS.PutUtxoSum <$> utxoNewSum)
 
 applyBlund
     :: (HasCoreConstants, MonadSlots ctx m, EGlobalApplyToilMode ctx m)
@@ -71,8 +72,8 @@ applyBlund txpBlund = do
 
     let txpBlock = txpBlund ^. _1
     let slotId   = case txpBlock of
-            Left gensisBlock -> SlotId
-                                  { siEpoch = gensisBlock ^. epochIndexL
+            Left genesisBlock -> SlotId
+                                  { siEpoch = genesisBlock ^. epochIndexL
                                   , siSlot  = minBound
                                   -- ^ Genesis block doesn't have a slot, set to minBound
                                   }

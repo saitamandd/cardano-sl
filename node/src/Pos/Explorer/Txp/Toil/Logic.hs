@@ -33,6 +33,7 @@ import           Pos.Txp.Core                (Tx (..), TxAux (..), TxId, TxOut (
 import           Pos.Txp.Toil                (ToilVerFailure (..))
 import qualified Pos.Txp.Toil                as Txp
 import           Pos.Util.Chrono             (NewestFirst (..))
+import           Pos.Util.Util               (Sign (..))
 
 ----------------------------------------------------------------------------
 -- Global
@@ -128,8 +129,6 @@ data BalanceUpdate = BalanceUpdate
     { minusBalance :: [(Address, Coin)]
     , plusBalance  :: [(Address, Coin)]
     }
-
-data Sign = Plus | Minus
 
 modifyAddrHistory
     :: MonadTxExtra m

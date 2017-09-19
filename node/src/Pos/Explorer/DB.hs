@@ -10,6 +10,7 @@ module Pos.Explorer.DB
        , getTxExtra
        , getAddrHistory
        , getAddrBalance
+       , getUtxoSum
        , getPageBlocks
        , getEpochBlocks
        , getLastTransactions
@@ -33,11 +34,11 @@ import           System.Wlog                  (WithLogger, logError)
 import           Pos.Binary.Class             (UnsignedVarInt (..), serialize')
 import           Pos.Context.Functions        (GenesisUtxo, genesisUtxoM)
 import           Pos.Core                     (Address, Coin, EpochIndex, HeaderHash,
-                                               unsafeAddCoin)
+                                               mkCoin, unsafeAddCoin)
 import           Pos.DB                       (DBError (..), DBIteratorClass (..),
                                                DBTag (GStateDB), MonadDB,
                                                MonadDBRead (dbGet), RocksBatchOp (..),
-                                               dbSerializeValue, dbIterSource,
+                                               dbIterSource, dbSerializeValue,
                                                encodeWithKeyPrefix)
 import           Pos.DB.GState.Common         (gsGetBi, gsPutBi, writeBatchGState)
 import           Pos.Explorer.Core            (AddrHistory, TxExtra (..))
@@ -76,6 +77,9 @@ getAddrHistory = fmap (NewestFirst . concat . maybeToList) .
 
 getAddrBalance :: MonadDBRead m => Address -> m (Maybe Coin)
 getAddrBalance = gsGetBi . addrBalanceKey
+
+getUtxoSum :: MonadDBRead m => m Coin
+getUtxoSum = fromMaybe (mkCoin 0) <$> gsGetBi utxoSumPrefix
 
 getPageBlocks :: MonadDBRead m => Page -> m (Maybe [HeaderHash])
 getPageBlocks = gsGetBi . blockPagePrefix
@@ -134,6 +138,8 @@ data ExplorerOp
     | PutAddrBalance !Address !Coin
     | DelAddrBalance !Address
 
+    | PutUtxoSum !Coin
+
 instance RocksBatchOp ExplorerOp where
 
     toBatchOp (AddTxExtra id extra) =
@@ -160,6 +166,9 @@ instance RocksBatchOp ExplorerOp where
         [Rocks.Put (addrBalanceKey addr) (dbSerializeValue coin)]
     toBatchOp (DelAddrBalance addr) =
         [Rocks.Del $ addrBalanceKey addr]
+
+    toBatchOp (PutUtxoSum coin) =
+        [Rocks.Put utxoSumPrefix (dbSerializeValue coin)]
 
 ----------------------------------------------------------------------------
 -- Iteration
@@ -236,3 +245,6 @@ blockEpochPrefix epoch = "e/epoch/" <> serialize' epoch
 
 lastTxsPrefix :: ByteString
 lastTxsPrefix = "e/ltxs/"
+
+utxoSumPrefix :: ByteString
+utxoSumPrefix = "e/utxosum/"

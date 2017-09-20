@@ -14598,6 +14598,37 @@ mainnet: &mainnet
       src: sample-mainnet-genesis.json
 
 
+##############################################################################
+##                                                                          ##
+##   Configs for mainnet launch tooling                                     ##
+##                                                                          ##
+##############################################################################
+
+mainnet_dryrun_base: 
+  <<: *mainnet_base
+  core: 
+    <<: *mainnet_base_core
+    genesis:
+      <<: *mainnet_base_genesis
+      spec: 
+        <<: *mainnet_base_spec
+        protocolConstants: 
+          <<: *mainnet_base_protocolConstants
+          protocolMagic: 633343913 #dryrun protocolMagic
+        avvmDistr: *mainnet_avvmDistr
+
+mainnet_launch_base: 
+  <<: *mainnet_base
+  core: 
+    <<: *mainnet_base_core
+    genesis:
+      <<: *mainnet_base_genesis
+      spec: 
+        <<: *mainnet_base_spec
+        protocolConstants: 
+          <<: *mainnet_base_protocolConstants
+          protocolMagic: 722151751 #mainnet protocolMagic
+        avvmDistr: *mainnet_avvmDistr
 
 ##############################################################################
 ##                                                                          ##
@@ -14644,8 +14675,6 @@ testnet_staging_full: &testnet_staging_full
           <<: *mainnet_base_protocolConstants
           protocolMagic: 60987900 #testnet protocolMagic
           k: 108
-
-
 
 ##############################################################################
 ##                                                                          ##

@@ -32,7 +32,7 @@ for i in $NODES; do
     stack exec --nix -- cardano-keygen --configuration-file node/configuration.mainnet.yaml --configuration-key mainnet_dryrun_base rearrange --mask "${STAKEHOLDER}${i}.key"
 
     pushd auxx
-    stack exec --nix -- cardano-auxx --configuration-file ../node/configuration.mainnet.yaml --configuration-key mainnet_dryrun_base --commands "add-key ${STAKEHOLDER}${i}.key"
+    stack exec --nix -- cardano-auxx --configuration-file ../node/configuration.mainnet.yaml --configuration-key mainnet_dryrun_base cmd --commands "add-key ${STAKEHOLDER}${i}.key"
     popd
 done
 

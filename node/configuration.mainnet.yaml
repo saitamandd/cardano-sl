@@ -10,7 +10,7 @@ mainnet_base: &mainnet_base
       spec: &mainnet_base_spec
         initializer:
           mainnetInitializer:
-            startTime: 1505930400 # 18:00 UTC on 2017-09-20
+            startTime: 1505930400000000 # 18:00 UTC on 2017-09-20
             bootStakeholders:
               204779e68379f19ad88c3599c22015988febb4c0258f100a61346ce1: 1
             vssCerts: {}
@@ -14555,7 +14555,7 @@ mainnet_example_generated: &mainnet_example_generated
             uW5VMAr01En3VT0_CUP2JT7DmSvvy4tyXhBd7Bf7mvU=: 383030
         initializer:
           mainnetInitializer:
-            startTime: 1505621332 
+            startTime: 1505621332000000
             bootStakeholders: 
                 0d916567f96b6a65d204966e6aab5fbd242e56c321833f8ba5d607da: 1
                 4bd1884f5ce2231be8623ecf5778a9112e26514205b39ff53529e735: 1

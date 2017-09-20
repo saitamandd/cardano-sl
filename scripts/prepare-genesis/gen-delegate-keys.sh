@@ -21,7 +21,7 @@ STAKEHOLDER="${KEY_PATH}/stakeholder"
 pushd "$REPO_PATH"
 rm -rf keys && mkdir -p keys
 time for i in $ALL_NODES; do
-    stack exec --nix -- cardano-keygen generate-key --path "${DELEGATE}${i}.key" --system-start "$START_TIME"
-    stack exec --nix -- cardano-keygen read-key --path "${DELEGATE}${i}.key" --system-start "$START_TIME"
+    stack exec --nix -- cardano-keygen --configuration-file node/configuration.mainnet.yaml --configuration-key mainnet_dryrun_base generate-key --path "${DELEGATE}${i}.key" --system-start "$START_TIME"
+    stack exec --nix -- cardano-keygen --configuration-file node/configuration.mainnet.yaml --configuration-key mainnet_dryrun_base read-key --path "${DELEGATE}${i}.key" --system-start "$START_TIME"
 done
 popd

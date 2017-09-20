@@ -19,5 +19,5 @@ DELEGATE="${KEY_PATH}/delegate"
 STAKEHOLDER="${KEY_PATH}/stakeholder"
 
 pushd "$REPO_PATH"
-stack exec --nix -- cardano-keygen generate-avvm-seeds -n "$AVVM_SEED_COUNT" -o keys/avvm --system-start "$START_TIME"
+stack exec --nix -- cardano-keygen --configuration-file node/configuration.mainnet.yaml --configuration-key mainnet_dryrun_base generate-avvm-seeds -n "$AVVM_SEED_COUNT" -o keys/avvm --system-start "$START_TIME"
 popd

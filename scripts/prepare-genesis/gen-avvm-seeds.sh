@@ -5,7 +5,6 @@ REPO_URL="https://github.com/input-output-hk/cardano-sl.git"
 REPO_PATH="$HOME/cardano-sl"
 BRANCH="cardano-sl-1.0-launch-tools"
 
-START_TIME="1505930400"    # 18:00 UTC on 2017-09-20
 AVVM_SEED_COUNT="3"
 
 IOHK_NODES=(0 1 2)
@@ -18,5 +17,5 @@ DELEGATE="${KEY_PATH}/delegate"
 STAKEHOLDER="${KEY_PATH}/stakeholder"
 
 pushd "$REPO_PATH"
-stack exec --nix -- cardano-keygen --configuration-file node/configuration.mainnet.yaml --configuration-key mainnet_dryrun_base generate-avvm-seeds -n "$AVVM_SEED_COUNT" -o keys/avvm --system-start "$START_TIME"
+stack exec --nix -- cardano-keygen --configuration-file node/configuration.mainnet.yaml --configuration-key mainnet_dryrun_base generate-avvm-seeds -n "$AVVM_SEED_COUNT" -o keys/avvm
 popd

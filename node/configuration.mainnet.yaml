@@ -11,7 +11,8 @@ mainnet_base: &mainnet_base
         initializer:
           mainnetInitializer:
             startTime: 1505930400 # 18:00 UTC on 2017-09-20
-            bootStakeholders: {}
+            bootStakeholders:
+              204779e68379f19ad88c3599c22015988febb4c0258f100a61346ce1: 1
             vssCerts: {}
             nonAvvmBalances: {}
         blockVersionData:

@@ -162,6 +162,8 @@ function node_cmd {
   local system_start=$4
   local config_dir=$5
   local exec_name=$6
+  local configuration_file=$7
+  local configuration_key=$8
   local st=''
   local reb=''
   local no_ntp=''
@@ -218,6 +220,8 @@ function node_cmd {
   echo -n " $web "
   echo -n " $report_server "
   echo -n " $wallet_args "
+  echo -n " --configuration-file $configuration_file"
+  echo -n " --configuration-key $configuration_key"
   echo -n " --system-start $system_start"
   echo -n " --metrics +RTS -T -RTS"
   echo -n " --ekg-server $ekg_server"
@@ -241,9 +245,13 @@ function bench_cmd {
   local conc=$4
   local delay=$5
   local sendmode=$6
+  local configuration_file=$7
+  local configuration_key=$8
   ensure_run
 
   echo -n "$(find_binary cardano-wallet)"
+  echo -n " --configuration-file $configuration_file"
+  echo -n " --configuration-key $configuration_key"
   # This assumes that the n-1 node is the relay
   echo -n " --peer 127.0.0.1:"`get_port $((i-1))`
   echo -n " $(logs node_lightwallet.log)"

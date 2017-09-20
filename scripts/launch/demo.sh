@@ -38,8 +38,18 @@ if [[ $config_dir == "" ]]; then
   gen_kademlia_topology $n
 fi
 
+configuration_file=$3
+if [[ $configuration_file = "" ]]; then
+  configuration_file="node/configuration.yaml"
+fi
+
+configuration_key=$4
+if [[ $configuration_key = "" ]]; then
+  configuration_key="default"
+fi
+
 # Stats are not mandatory either
-stats=$4
+stats=$5
 
 panesCnt=$n
 
@@ -92,14 +102,14 @@ while [[ $i -lt $panesCnt ]]; do
   fi
 
   if [[ $i -lt $n ]]; then
-    node_cmd="$(node_cmd $i "$stats" "$wallet_args" "$system_start" "$config_dir" $exec_name) --no-ntp"
+    node_cmd="$(node_cmd $i "$stats" "$wallet_args" "$system_start" "$config_dir" $exec_name "$configuration_file" "$configuration_key") --no-ntp"
     echo "$node_cmd"
     tmux send-keys "$node_cmd" C-m
   else
     # Number of transactions to send per-thread: 300
     # Concurrency (number of threads sending transactions); $CONC
     # Delay between sends on each thread: 500 milliseconds
-    tmux send-keys "sleep 40s && $(bench_cmd $i "$system_start" $NUM_TXS $CONC 500 neighbours)" C-m
+    tmux send-keys "sleep 40s && $(bench_cmd $i "$system_start" $NUM_TXS $CONC 500 neighbours "$configuration_file" "$configuration_key")" C-m
   fi
   i=$((i+1))
 done

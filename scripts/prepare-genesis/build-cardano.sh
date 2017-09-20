@@ -1,4 +1,3 @@
-
 #!/usr/bin/env bash
 set -ex
 
@@ -22,6 +21,7 @@ if which nix-env; then
 else
     echo "Installing the nix package manager."
     curl https://nixos.org/nix/install | sh
+    export PATH="$PATH:$HOME/.nix-profile/bin"
 fi
 
 nix-env -i git stack

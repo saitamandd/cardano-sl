@@ -114,7 +114,7 @@ generateKeysByGenesis
     => GenKeysOptions -> m ()
 generateKeysByGenesis GenKeysOptions{..} = do
     case ccGenesis coreConfiguration of
-        GCSrc _ ->
+        GCSrc _ _ ->
             error $ "Launched source file conf"
         GCSpec spec -> case gsInitializer spec of
             MainnetInitializer{}   -> error "Can't generate keys for MainnetInitializer"

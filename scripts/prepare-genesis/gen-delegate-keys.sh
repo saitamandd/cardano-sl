@@ -5,7 +5,6 @@ REPO_URL="https://github.com/input-output-hk/cardano-sl.git"
 REPO_PATH="$HOME/cardano-sl"
 BRANCH="cardano-sl-1.0-launch-tools"
 
-START_TIME="1505930400"    # 18:00 UTC on 2017-09-20
 AVVM_SEED_COUNT="3"
 
 IOHK_NODES=(0 1 2)
@@ -20,7 +19,7 @@ STAKEHOLDER="${KEY_PATH}/stakeholder"
 pushd "$REPO_PATH"
 rm -rf keys && mkdir -p keys
 time for i in $ALL_NODES; do
-    stack exec --nix -- cardano-keygen --configuration-file node/configuration.mainnet.yaml --configuration-key mainnet_dryrun_base generate-key --path "${DELEGATE}${i}.key" --system-start "$START_TIME"
-    stack exec --nix -- cardano-keygen --configuration-file node/configuration.mainnet.yaml --configuration-key mainnet_dryrun_base read-key --path "${DELEGATE}${i}.key" --system-start "$START_TIME"
+    stack exec --nix -- cardano-keygen --configuration-file node/configuration.mainnet.yaml --configuration-key mainnet_dryrun_base generate-key --path "${DELEGATE}${i}.key"
+    stack exec --nix -- cardano-keygen --configuration-file node/configuration.mainnet.yaml --configuration-key mainnet_dryrun_base read-key --path "${DELEGATE}${i}.key"
 done
 popd

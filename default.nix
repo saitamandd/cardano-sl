@@ -76,7 +76,31 @@ let
       });
     };
   });
+  dockerImage = let
+    topologyFile = pkgs.writeText "topology.yaml" ''
+      wallet:
+        relays: [ [ { "host": "relay-1.cardano", "port": 3000 } ] ]
+        valency: 3
+        fallbacks: 0
+    '';
+  in pkgs.dockerTools.buildImage {
+    name = "cardano-container";
+    contents = cardanoPkgs.cardano-sl-static;
+    config = {
+      Cmd = [
+        "${cardanoPkgs.cardano-sl-static}/bin/cardano-node-simple"
+        "--no-ntp"
+        "--topology" "${topologyFile}"
+        "--db-path" "db-testnet-0.6"
+        "--wallet-db-path" "wdb-testnet-0.6"
+      ];
+      ExposedPorts = {
+        "3000/tcp" = {};
+      };
+    };
+  };
   upstream = {
+    inherit dockerImage;
     stack2nix = import (pkgs.fetchFromGitHub {
       owner = "input-output-hk";
       repo = "stack2nix";
